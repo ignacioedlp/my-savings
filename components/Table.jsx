@@ -1,5 +1,5 @@
 import { useTable } from 'react-table'
-import { classNames } from '../lib/Utils'
+import { classNames } from '../lib/utils'
 import { useMemo } from 'react'
 
 function CurrencyPill({ value }) {
