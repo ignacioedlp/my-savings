@@ -89,7 +89,7 @@ function CreateSaving({ optionsCurrency }) {
     console.log(raw)
 
     try {
-      const res = await fetch('http://localhost:3000/api/saving', {
+      const res = await fetch('https://my-savings.vercel.app/api/saving', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: raw,
