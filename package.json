@@ -2,19 +2,40 @@
   "name": "my-savings",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier": "prettier --check --ignore-path .gitignore .",
+    "prettier:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@material-tailwind/react": "^1.0.6",
+    "@prisma/client": "^4.0.0",
+    "@redux-devtools/extension": "^3.2.2",
+    "@reduxjs/toolkit": "^1.8.3",
+    "javascript-time-ago": "^2.5.6",
     "next": "12.2.2",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.3.0",
+    "react-redux": "^8.0.2",
+    "react-select": "^5.4.0",
+    "react-table": "^7.8.0",
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.7",
     "eslint": "8.19.0",
-    "eslint-config-next": "12.2.2"
+    "eslint-config-next": "12.2.2",
+    "postcss": "^8.4.14",
+    "prettier": "^2.7.1",
+    "prisma": "^4.0.0",
+    "tailwindcss": "^3.1.6"
   }
 }
