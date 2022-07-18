@@ -96,7 +96,6 @@ function CreateSaving({ optionsCurrency }) {
         redirect: 'follow',
       })
       toast.success('Successfully created!')
-      router.push('/')
     } catch (error) {
       console.log('error', error)
       toast.error('This is an error!')

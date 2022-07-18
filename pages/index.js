@@ -2,9 +2,10 @@ import Head from 'next/head'
 import CreateSaving from '../components/CreateSaving.jsx'
 import Table from '../components/Table.jsx'
 import Total from '../components/Total.jsx'
+import useSWR from 'swr'
+import { useState } from 'react'
 
 export default function Home({
-  data,
   totalInUsdCCL,
   totalInArsCCL,
   dolarCCL,
@@ -12,6 +13,15 @@ export default function Home({
   totalInCrypto,
   dolarBlue,
 }) {
+  const { data, error } = useSWR('/api/saving')
+
+  
+
+
+
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
+
   return (
     <>
       <Head>
@@ -60,7 +70,6 @@ export const getServerSideProps = async () => {
   )
 
   const criptoList = await criptoResponse.json()
-  console.log(criptoList)
 
   var requestOptions = {
     method: 'GET',
@@ -137,7 +146,6 @@ export const getServerSideProps = async () => {
 
   return {
     props: {
-      data,
       totalInUsdCCL: {
         totalInUsd: totalInUsd.toFixed(2),
         totalInArsCCL: totalInUsd * parseFloat(dolarCCL.venta),
