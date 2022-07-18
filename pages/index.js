@@ -50,7 +50,7 @@ export default function Home({
 }
 
 export const getServerSideProps = async () => {
-  const response = await fetch('http://localhost:3000/api/saving')
+  const response = await fetch('https://my-savings.vercel.app/api/saving')
   const criptoResponse = await fetch(
     'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd',
     {
