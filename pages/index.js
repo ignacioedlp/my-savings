@@ -26,7 +26,7 @@ export default function Home({
         <div className="mt-4 shadow-md">
           <CreateSaving optionsCurrency={optionsCurrency} />
         </div>
-        <div className="flex flex-col md:flex-row justify-center w-full ">
+        <div className="flex flex-col md:flex-row justify-center w-full items-center">
           <Total title={'USD CCL'} amount={dolarCCL} />
           <Total title={'USD Blue'} amount={dolarBlue} />
           <Total title={'Total in ARS'} amount={totalInArsCCL.toFixed(2)} />
