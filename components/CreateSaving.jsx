@@ -9,6 +9,11 @@ const optionsCategories = [
   { value: 'Fiat', label: 'Fiat', name: 'newCategory' },
   { value: 'Cripto', label: 'Cripto', name: 'newCategory' },
   { value: 'USD fisico', label: 'USD fisico', name: 'newCategory' },
+  { value: 'Mercado libre', label: 'Mercado libre', name: 'newCategory' },
+  { value: 'OnTop', label: 'OnTop', name: 'newCategory' },
+  { value: 'Lemon', label: 'Lemon', name: 'newCategory' },
+  { value: 'Payoneer', label: 'Payoneer', name: 'newCategory' },
+  { value: 'Cuenta DNI', label: 'Cuenta DNI', name: 'newCategory' },
 ]
 
 const optionsConcept = [
@@ -23,9 +28,6 @@ const optionsFiats = [
 ]
 
 function CreateSaving({ optionsCurrency }) {
-  const router = useRouter()
-  const dispatch = useDispatch()
-
   const [values, setValues] = React.useState({
     newCategory: '',
     newCurrency: '',
@@ -105,7 +107,7 @@ function CreateSaving({ optionsCurrency }) {
   }
 
   return (
-    <section className="text-gray-600 body-font relative ">
+    <section className="text-white body-font relative ">
       <Toaster />
       <div className="container px-5 py-10 mx-auto">
         <div className="flex flex-col text-center w-full mb-4">
@@ -119,7 +121,7 @@ function CreateSaving({ optionsCurrency }) {
               <div className="relative">
                 <label
                   forHtml="newCategory"
-                  className="leading-7 text-sm text-gray-600"
+                  className="leading-7 text-md text-whites"
                 >
                   Category
                 </label>
@@ -129,6 +131,7 @@ function CreateSaving({ optionsCurrency }) {
                   type="text"
                   id="newCategory"
                   name="newCategory"
+                  className="text-black"
                 />
               </div>
             </div>
@@ -137,7 +140,7 @@ function CreateSaving({ optionsCurrency }) {
               <div className="relative">
                 <label
                   forHtml="newCurrency"
-                  className="leading-7 text-sm text-gray-600"
+                  className="leading-7 text-md text-whites"
                 >
                   Currency
                 </label>
@@ -151,6 +154,7 @@ function CreateSaving({ optionsCurrency }) {
                   type="text"
                   id="newCurrency"
                   name="newCurrency"
+                  className="text-black"
                 />
               </div>
             </div>
@@ -158,7 +162,7 @@ function CreateSaving({ optionsCurrency }) {
               <div className="relative">
                 <label
                   forHtml="newConcept"
-                  className="leading-7 text-sm text-gray-600"
+                  className="leading-7 text-md text-white"
                 >
                   Concept
                 </label>
@@ -168,6 +172,7 @@ function CreateSaving({ optionsCurrency }) {
                   type="text"
                   id="newConcept"
                   name="newConcept"
+                  className="text-black"
                 />
               </div>
             </div>
@@ -175,7 +180,7 @@ function CreateSaving({ optionsCurrency }) {
               <div className="relative">
                 <label
                   forHtml="newAmount"
-                  className="leading-7 text-sm text-gray-600"
+                  className="leading-7 text-md text-white"
                 >
                   Amount
                 </label>
@@ -185,12 +190,12 @@ function CreateSaving({ optionsCurrency }) {
                   id="newAmount"
                   value={values.newAmount}
                   name="newAmount"
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className="w-full bg-white bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
             </div>
             <button
-              className="flex mx-auto mt-6 text-white bg-indigo-500 border-0 py-2 px-5 focus:outline-none hover:bg-indigo-600 rounded"
+              className="flex mx-auto mt-6 text-white bg-rose-500 border-0 py-2 px-5 focus:outline-none hover:bg-rose-600 rounded"
               onClick={handleCreateSaving}
             >
               Add saving

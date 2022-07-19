@@ -2,10 +2,10 @@ import React from 'react'
 
 function Total({ amount, title, extra }) {
   return (
-    <section className="text-gray-600 body-font w-64 shadow-md justify-center m-10 flex">
-      <div className="flex flex-col items-center m-auto">
+    <section className="text-white body-font w-64 shadow-md justify-center m-10 flex bg-slate-700 rounded-md p-4 items-center">
+      <div className="flex flex-col items-center m-auto text-center">
         <h1 className="sm:text-3xl text-2xl font-bold mb-4">{title}</h1>
-        <h1 className="sm:text-3xl text-2xl font-bold mb-4">
+        <h1 className="sm:text-3xl text-2xl font-bold mb-4 text-green-600">
           {amount.toLocaleString('es-ES')}$
         </h1>
         {extra != undefined && extra != null && (
