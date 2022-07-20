@@ -4,18 +4,17 @@ import Table from '../components/Table.jsx'
 import Total from '../components/Total.jsx'
 import useSWR from 'swr'
 
-export default function Home({
-  totalInUsdCCL,
-  optionsCurrency,
-  totalInCrypto,
-  totalInArs,
-}) {
+export default function Home({ totalInUsdCCL, optionsCurrency, totalInArs }) {
   const contadoCLL = useSWR(
     'https://api-dolar-argentina.herokuapp.com/api/contadoliqui',
   )
 
   const dolarBlue = useSWR(
     'https://api-dolar-argentina.herokuapp.com/api/dolarblue',
+  )
+
+  const criptoList = useSWR(
+    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd',
   )
 
   const savings = useSWR('api/saving')
@@ -25,6 +24,20 @@ export default function Home({
   }
   if (!contadoCLL.data || !dolarBlue.data || !savings.data) {
     return <div>loading...</div>
+  }
+
+  const handleCrypto = (data) => {
+    let totalInCrypto = 0
+
+    for (const element of data) {
+      if (element.category == 'Cripto') {
+        let coin = criptoList.data.find((c) => c.id == element.currency)
+        if (coin != undefined && coin != null) {
+          totalInCrypto += coin.current_price * element.amount
+        }
+      }
+    }
+    return totalInCrypto
   }
 
   return (
@@ -48,7 +61,7 @@ export default function Home({
             title={'Total ARS'}
             amount={(
               totalInUsdCCL.totalInUsd * parseInt(contadoCLL.data.venta) +
-              totalInCrypto.totalInCrypto * parseInt(dolarBlue.data.venta) +
+              handleCrypto(savings.data) +
               totalInArs
             ).toFixed(2)}
           />
@@ -56,7 +69,7 @@ export default function Home({
             title={'Total USD'}
             amount={
               parseInt(totalInUsdCCL.totalInUsd) +
-              parseInt(totalInCrypto.totalInCrypto)
+              parseInt(handleCrypto(savings.data))
             }
           />
           <Total
@@ -68,9 +81,9 @@ export default function Home({
           />
           <Total
             title={'Total Crypto'}
-            amount={totalInCrypto.totalInCrypto}
+            amount={handleCrypto(savings.data)}
             extra={(
-              totalInCrypto.totalInCrypto * parseInt(dolarBlue.data.venta)
+              handleCrypto(savings.data) * parseInt(dolarBlue.data.venta)
             ).toFixed(2)}
           />
         </div>
