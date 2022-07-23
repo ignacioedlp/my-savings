@@ -3,6 +3,7 @@ import CreateSaving from '../components/CreateSaving.jsx'
 import Table from '../components/Table.jsx'
 import Total from '../components/Total.jsx'
 import useSWR from 'swr'
+import ChartLine from '../components/Chart.tsx'
 
 export default function Home({ totalInUsdCCL, optionsCurrency, totalInArs }) {
   const contadoCLL = useSWR(
