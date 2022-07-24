@@ -2,7 +2,7 @@ import React from 'react'
 
 function Total({ amount, title, extra }) {
   return (
-    <section className=" body-font  shadow-md justify-center m-10 flex  items-center">
+    <section className=" body-font  shadow-md justify-center m-10 flex  items-center ">
       <div className="shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-800 w-64  items-center text-center">
         <div className="flex items-center">
           <span className="rounded-xl relative p-4 bg-green-200">

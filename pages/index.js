@@ -18,7 +18,7 @@ export default function Home({ totalInUsdCCL, optionsCurrency, totalInArs }) {
     'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd',
   )
 
-  const savings = useSWR('api/saving')
+  const savings = useSWR('https://my-savings.vercel.app/api/saving')
 
   if (contadoCLL.error || dolarBlue.error || savings.error) {
     return <div>failed to load</div>
@@ -52,9 +52,14 @@ export default function Home({ totalInUsdCCL, optionsCurrency, totalInArs }) {
         <div className=" text-white">
           <h1 className="text-xl font-semibold">My savings</h1>
         </div>
-        <div className="flex flex-col md:flex-row justify-center w-full items-center">
+        <div className="flex  flex-col md:flex-row justify-center w-full items-center">
           <Total title={'USD CCL'} amount={contadoCLL.data.venta} />
-          <CreateSaving optionsCurrency={optionsCurrency} />
+          <ChartLine
+            cripto={handleCrypto(savings.data)}
+            dolares={parseInt(totalInUsdCCL.totalInUsd)}
+            pesos={totalInArs / parseInt(dolarBlue.data.venta)}
+          />
+
           <Total title={'USD Blue'} amount={parseFloat(dolarBlue.data.venta)} />
         </div>
         <div className="flex flex-col md:flex-row justify-center w-full items-center">
@@ -88,6 +93,9 @@ export default function Home({ totalInUsdCCL, optionsCurrency, totalInArs }) {
             ).toFixed(2)}
           />
         </div>
+        <div className="flex flex-col md:flex-row justify-center">
+          <CreateSaving optionsCurrency={optionsCurrency} />
+        </div>
         <div className="mt-4 shadow-md">
           <Table data={savings.data} />
         </div>
@@ -96,7 +104,7 @@ export default function Home({ totalInUsdCCL, optionsCurrency, totalInArs }) {
   )
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const response = await fetch('https://my-savings.vercel.app/api/saving')
   const criptoResponse = await fetch(
     'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd',
@@ -108,7 +116,7 @@ export const getServerSideProps = async () => {
 
   const criptoList = await criptoResponse.json()
 
-  var requestOptions = {
+  let requestOptions = {
     method: 'GET',
     redirect: 'follow',
   }
@@ -179,13 +187,11 @@ export const getServerSideProps = async () => {
     props: {
       totalInUsdCCL: {
         totalInUsd: totalInUsd.toFixed(2),
-        totalInArsCCL: totalInUsd * parseFloat(dolarCCL.venta),
       },
       optionsCurrency: optionsCurrency,
       totalInArs: totalInArs,
       totalInCrypto: {
         totalInCrypto: totalInCrypto.toFixed(2),
-        totalInArsCripto: totalInCrypto * parseFloat(dolarBlue.venta),
       },
     },
   }
