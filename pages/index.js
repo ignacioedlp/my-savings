@@ -76,7 +76,7 @@ export default function Home({
   );
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   let requestOptions = {
     method: 'GET',
     redirect: 'follow',
