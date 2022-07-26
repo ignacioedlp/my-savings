@@ -92,62 +92,62 @@ export const getStaticProps = async () => {
   const criptoList = await criptoResponse.json()
 
   const onTop = await fetch(
-    'http://localhost:3000/api/saving?categoria=OnTop',
+    'https://my-savings.vercel.app/api/saving?categoria=OnTop',
     requestOptions,
   )
     .then((res) => res.json())
     .catch((error) => console.log('error', error))
 
   const payoneer = await fetch(
-    'http://localhost:3000/api/saving?categoria=Payoneer',
+    'https://my-savings.vercel.app/api/saving?categoria=Payoneer',
     requestOptions,
   )
     .then((res) => res.json())
     .catch((error) => console.log('error', error))
 
   const criptos = await fetch(
-    'http://localhost:3000/api/saving?categoria=Cripto&list=true',
+    'https://my-savings.vercel.app/api/saving?categoria=Cripto&list=true',
     requestOptions,
   )
     .then((res) => res.json())
     .catch((error) => console.log('error', error))
 
   const cuentaDni = await fetch(
-    'http://localhost:3000/api/saving?categoria=Cuenta DNI',
+    'https://my-savings.vercel.app/api/saving?categoria=Cuenta DNI',
     requestOptions,
   )
     .then((res) => res.json())
     .catch((error) => console.log('error', error))
 
   const usdFisico = await fetch(
-    'http://localhost:3000/api/saving?categoria=USD fisico',
+    'https://my-savings.vercel.app/api/saving?categoria=USD fisico',
     requestOptions,
   )
     .then((res) => res.json())
     .catch((error) => console.log('error', error))
 
   const lemon = await fetch(
-    'http://localhost:3000/api/saving?categoria=Lemon',
+    'https://my-savings.vercel.app/api/saving?categoria=Lemon',
     requestOptions,
   )
     .then((res) => res.json())
     .catch((error) => console.log('error', error))
 
   const fiat = await fetch(
-    'http://localhost:3000/api/saving?categoria=Fiat',
+    'https://my-savings.vercel.app/api/saving?categoria=Fiat',
     requestOptions,
   )
     .then((res) => res.json())
     .catch((error) => console.log('error', error))
 
   const mercadoLibre = await fetch(
-    'http://localhost:3000/api/saving?categoria=Mercado libre',
+    'https://my-savings.vercel.app/api/saving?categoria=Mercado libre',
     requestOptions,
   )
     .then((res) => res.json())
     .catch((error) => console.log('error', error))
 
-  const savingsList = await fetch('http://localhost:3000/api/saving', {
+  const savingsList = await fetch('https://my-savings.vercel.app/api/saving', {
     requestOptions,
   })
     .then((res) => res.json())
