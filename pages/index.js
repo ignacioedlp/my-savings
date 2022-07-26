@@ -1,8 +1,8 @@
-import Head from 'next/head'
-import CreateSaving from '../components/CreateSaving.jsx'
-import Table from '../components/Table.jsx'
-import Total from '../components/Total.jsx'
-import ChartLine from '../components/Chart.tsx'
+import Head from 'next/head';
+import CreateSaving from '../components/CreateSaving.jsx';
+import Table from '../components/Table.jsx';
+import Total from '../components/Total.jsx';
+import ChartLine from '../components/Chart.jsx';
 
 export default function Home({
   savings,
@@ -73,111 +73,111 @@ export default function Home({
         </div>
       </main>
     </>
-  )
+  );
 }
 
 export const getStaticProps = async () => {
   let requestOptions = {
     method: 'GET',
     redirect: 'follow',
-  }
+  };
 
-  const savings = []
+  const savings = [];
 
   const criptoResponse = await fetch(
     'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd',
-    requestOptions,
-  )
+    requestOptions
+  );
 
-  const criptoList = await criptoResponse.json()
+  const criptoList = await criptoResponse.json();
 
   const onTop = await fetch(
     'https://my-savings.vercel.app/api/saving?categoria=OnTop',
-    requestOptions,
+    requestOptions
   )
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   const payoneer = await fetch(
     'https://my-savings.vercel.app/api/saving?categoria=Payoneer',
-    requestOptions,
+    requestOptions
   )
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   const criptos = await fetch(
     'https://my-savings.vercel.app/api/saving?categoria=Cripto&list=true',
-    requestOptions,
+    requestOptions
   )
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   const cuentaDni = await fetch(
     'https://my-savings.vercel.app/api/saving?categoria=Cuenta DNI',
-    requestOptions,
+    requestOptions
   )
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   const usdFisico = await fetch(
     'https://my-savings.vercel.app/api/saving?categoria=USD fisico',
-    requestOptions,
+    requestOptions
   )
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   const lemon = await fetch(
     'https://my-savings.vercel.app/api/saving?categoria=Lemon',
-    requestOptions,
+    requestOptions
   )
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   const fiat = await fetch(
     'https://my-savings.vercel.app/api/saving?categoria=Fiat',
-    requestOptions,
+    requestOptions
   )
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   const mercadoLibre = await fetch(
     'https://my-savings.vercel.app/api/saving?categoria=Mercado libre',
-    requestOptions,
+    requestOptions
   )
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   const savingsList = await fetch('https://my-savings.vercel.app/api/saving', {
     requestOptions,
   })
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   const dolarCCL = await fetch(
     'https://api-dolar-argentina.herokuapp.com/api/contadoliqui',
-    requestOptions,
+    requestOptions
   )
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   const dolarBlue = await fetch(
     'https://api-dolar-argentina.herokuapp.com/api/dolarblue',
-    requestOptions,
+    requestOptions
   )
     .then((res) => res.json())
-    .catch((error) => console.log('error', error))
+    .catch((error) => console.log('error', error));
 
   //Creo un array con objetos de {id, name, amount}
   let optionsCurrency = criptoList.map((coin) => {
-    return { value: coin.id, label: coin.name, name: 'newCurrency' }
-  })
+    return { value: coin.id, label: coin.name, name: 'newCurrency' };
+  });
 
-  let totalInCrypto = 0
+  let totalInCrypto = 0;
 
   for (const element of criptos) {
-    let coin = criptoList.find((c) => c.id == element.currency)
+    let coin = criptoList.find((c) => c.id == element.currency);
     if (coin != undefined && coin != null) {
-      totalInCrypto += coin.current_price * element.amount
+      totalInCrypto += coin.current_price * element.amount;
     }
   }
 
@@ -185,31 +185,31 @@ export const getStaticProps = async () => {
     name: 'Cripto',
     total: totalInCrypto,
     totalInArs: totalInCrypto * parseFloat(dolarBlue.venta),
-  })
+  });
   savings.push({
     name: 'OnTop',
     total: onTop,
     totalInArs: onTop * parseFloat(dolarCCL.venta),
-  })
+  });
   savings.push({
     name: 'Payoneer',
     total: payoneer,
     totalInArs: payoneer * parseFloat(dolarCCL.venta),
-  })
-  savings.push({ name: 'Lemon', total: lemon })
-  savings.push({ name: 'Mercado Libre', total: mercadoLibre })
+  });
+  savings.push({ name: 'Lemon', total: lemon });
+  savings.push({ name: 'Mercado Libre', total: mercadoLibre });
   savings.push({
     name: 'Fiat',
     total: fiat,
     totalInArs: fiat * parseFloat(dolarBlue.venta),
-  })
+  });
   savings.push({
     name: 'Fisico USD',
     total: usdFisico,
     totalInArs: usdFisico * parseFloat(dolarBlue.venta),
-  })
-  savings.push({ name: 'Cuenta DNI', total: cuentaDni })
-  const pesos = { name: 'Total ARS', total: cuentaDni + lemon + mercadoLibre }
+  });
+  savings.push({ name: 'Cuenta DNI', total: cuentaDni });
+  const pesos = { name: 'Total ARS', total: cuentaDni + lemon + mercadoLibre };
   const dolares = {
     name: 'Total USD',
     total: payoneer + usdFisico + fiat + onTop + totalInCrypto,
@@ -219,7 +219,7 @@ export const getStaticProps = async () => {
       fiat * parseFloat(dolarBlue.venta) +
       payoneer * parseFloat(dolarCCL.venta) +
       totalInCrypto * parseFloat(dolarBlue.venta),
-  }
+  };
 
   return {
     props: {
@@ -232,5 +232,5 @@ export const getStaticProps = async () => {
       dolares: dolares,
       cripto: { name: 'Total Cripto', total: totalInCrypto },
     },
-  }
-}
+  };
+};

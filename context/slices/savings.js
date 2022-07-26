@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = []
+const initialState = [];
 
 export const savingsSlice = createSlice({
   name: 'savings',
@@ -13,9 +13,9 @@ export const savingsSlice = createSlice({
           amount: element.amount,
           concept: element.concept,
           currency: element.currency,
-        }
-        
-        state.push(newSaving)
+        };
+
+        state.push(newSaving);
       }
     },
     addSaving: (state = initialState, action) => {
@@ -24,12 +24,12 @@ export const savingsSlice = createSlice({
         amount: action.payload.newAmount,
         concept: action.payload.newConcept,
         currency: action.payload.newCurrency,
-      }
+      };
 
-      state.push(newSaving)
+      state.push(newSaving);
     },
   },
-})
+});
 
-export const { initSavings, addSaving } = savingsSlice.actions
-export default savingsSlice.reducer
+export const { initSavings, addSaving } = savingsSlice.actions;
+export default savingsSlice.reducer;

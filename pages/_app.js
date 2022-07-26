@@ -1,7 +1,7 @@
-import '../styles/globals.css'
-import { Provider } from 'react-redux'
-import { store } from '../context/store'
-import { SWRConfig } from 'swr'
+import '../styles/globals.css';
+import { Provider } from 'react-redux';
+import { store } from '../context/store';
+import { SWRConfig } from 'swr';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
         <Component {...pageProps} />
       </Provider>
     </SWRConfig>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;

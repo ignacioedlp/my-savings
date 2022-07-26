@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import Select from 'react-select'
-import { useDispatch } from 'react-redux'
-import { addSaving } from '../context/slices/savings.js'
-import toast, { Toaster } from 'react-hot-toast'
-import { useRouter } from 'next/router.js'
+import React, { useState } from 'react';
+import Select from 'react-select';
+import { useDispatch } from 'react-redux';
+import { addSaving } from '../context/slices/savings.js';
+import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/router.js';
 
 const optionsCategories = [
   { value: 'Fiat', label: 'Fiat', name: 'newCategory' },
@@ -14,18 +14,18 @@ const optionsCategories = [
   { value: 'Lemon', label: 'Lemon', name: 'newCategory' },
   { value: 'Payoneer', label: 'Payoneer', name: 'newCategory' },
   { value: 'Cuenta DNI', label: 'Cuenta DNI', name: 'newCategory' },
-]
+];
 
 const optionsConcept = [
   { value: 'Salary', label: 'Salary', name: 'newConcept' },
   { value: 'Gift', label: 'Gift', name: 'newConcept' },
   { value: 'Invest', label: 'Invest', name: 'newConcept' },
-]
+];
 
 const optionsFiats = [
   { value: 'usd', label: 'USD', name: 'newCurrency' },
   { value: 'ars', label: 'ARS', name: 'newCurrency' },
-]
+];
 
 function CreateSaving({ optionsCurrency }) {
   const [values, setValues] = React.useState({
@@ -33,16 +33,16 @@ function CreateSaving({ optionsCurrency }) {
     newCurrency: '',
     newConcept: '',
     newAmount: 0,
-  })
+  });
 
   function handleChangeAmount(evt) {
     /*
       evt.target es el elemento que ejecuto el evento
       name identifica el input y value describe el valor actual
     */
-    console.log(evt)
-    const { target } = evt
-    const { name, value } = target
+    console.log(evt);
+    const { target } = evt;
+    const { name, value } = target;
     /*
       Este snippet:
       1. Clona el estado actual
@@ -52,9 +52,9 @@ function CreateSaving({ optionsCurrency }) {
     const newValues = {
       ...values,
       [name]: value,
-    }
+    };
     // Sincroniza el estado de nuevo
-    setValues(newValues)
+    setValues(newValues);
   }
 
   function handleChangeSelect(evt) {
@@ -62,9 +62,9 @@ function CreateSaving({ optionsCurrency }) {
       evt.target es el elemento que ejecuto el evento
       name identifica el input y value describe el valor actual
     */
-    console.log(evt)
+    console.log(evt);
 
-    const { label, value, name } = evt
+    const { label, value, name } = evt;
     /*
       Este snippet:
       1. Clona el estado actual
@@ -74,21 +74,21 @@ function CreateSaving({ optionsCurrency }) {
     const newValues = {
       ...values,
       [name]: value,
-    }
+    };
     // Sincroniza el estado de nuevo
-    setValues(newValues)
+    setValues(newValues);
   }
 
   const handleCreateSaving = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     let raw = JSON.stringify({
       category: values.newCategory,
       currency: values.newCurrency,
       concept: values.newConcept,
       amount: values.newAmount,
-    })
+    });
 
-    console.log(raw)
+    console.log(raw);
 
     try {
       const res = await fetch('https://my-savings.vercel.app/api/saving', {
@@ -96,15 +96,15 @@ function CreateSaving({ optionsCurrency }) {
         headers: { 'Content-Type': 'application/json' },
         body: raw,
         redirect: 'follow',
-      })
-      toast.success('Successfully created!')
+      });
+      toast.success('Successfully created!');
     } catch (error) {
-      console.log('error', error)
-      toast.error('This is an error!')
+      console.log('error', error);
+      toast.error('This is an error!');
     }
 
     // dispatch(addSaving(values))
-  }
+  };
 
   return (
     <section className="text-white body-font relative ">
@@ -204,7 +204,7 @@ function CreateSaving({ optionsCurrency }) {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default CreateSaving
+export default CreateSaving;

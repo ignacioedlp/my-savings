@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 function Total({ amount = 0, title, extra }) {
   return (
@@ -32,7 +32,7 @@ function Total({ amount = 0, title, extra }) {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default Total
+export default Total;
