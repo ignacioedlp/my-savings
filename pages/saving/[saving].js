@@ -2,7 +2,15 @@ import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-function Saving({ save }) {
+function Saving({
+  save = {
+    id: null,
+    category: null,
+    amount: null,
+    currency: null,
+    concept: null,
+  },
+}) {
   const [newAmount, setNewAmount] = useState(0);
   const router = useRouter();
 
