@@ -141,9 +141,8 @@ export async function getStaticProps({ params }) {
   // params.id will be like ['a', 'b', 'c']
 
   const save = await fetch(
-    'http://localhost:3000/api/saving/' + params.saving
+    'https://my-savings.vercel.app/api/saving/' + params.saving
   ).then((res) => res.json());
-
 
   return {
     props: {
