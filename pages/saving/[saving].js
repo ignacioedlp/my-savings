@@ -77,21 +77,21 @@ function Saving({ save }) {
           <div className="flex flex-row justify-around">
             <div className="flex flex-col items-center">
               <h4 className="text-xl font-semibold">Category</h4>
-              <p className="text-md">{save.category}</p>
+              <p className="text-md">{save.category || 'category'}</p>
             </div>
             <div className="flex flex-col items-center">
               <h4 className="text-xl font-semibold">Amount</h4>
-              <p className="text-md">{save.amount}</p>
+              <p className="text-md">{save.amount || 'amount'}</p>
             </div>
           </div>
           <div className="flex flex-row justify-around">
             <div className="flex flex-col items-center">
               <h4 className="text-xl font-semibold">Currency</h4>
-              <p className="text-md">{save.currency}</p>
+              <p className="text-md">{save.currency || 'currency'}</p>
             </div>
             <div className="flex flex-col items-center">
               <h4 className="text-xl font-semibold">Concept</h4>
-              <p className="text-md">{save.concept}</p>
+              <p className="text-md">{save.concept || 'concept'}</p>
             </div>
           </div>
         </div>
@@ -139,7 +139,6 @@ export default Saving;
 
 export async function getStaticProps({ params }) {
   // params.id will be like ['a', 'b', 'c']
-  console.log(params);
 
   const save = await fetch(
     'http://localhost:3000/api/saving/' + params.saving
