@@ -146,9 +146,9 @@ function CreateSaving({ optionsCurrency }) {
                 </label>
                 <Select
                   options={
-                    values.newCategory.includes('Fiat')
-                      ? optionsFiats
-                      : optionsCurrency
+                    values.newCategory.includes('Cripto')
+                      ? optionsCurrency
+                      : optionsFiats
                   }
                   onChange={handleChangeSelect}
                   type="text"

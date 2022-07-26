@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
@@ -19,34 +20,22 @@ export default async function poduct(req, res) {
         res.status(error.statusCode || 500).json(error.message);
       }
       break;
-    case 'UPDATE':
-      // const { action, newAmount } = req.body;
-      // try {
-      //   if (action == 'add') {
-      //     saving = await prisma.saving.findUnique({
-      //       where: {
-      //         id: savingId,
-      //       },
-      //       // data: {
-      //       //   amount: amount + newAmount,
-      //       // },
-      //     });
-      //   } else {
-      //     saving = await prisma.saving.findUnique({
-      //       where: {
-      //         id: savingId,
-      //       },
-      //       // data: {
-      //       //   amount: amount - newAmount,
-      //       // },
-      //     });
-      //   }
-
-      // res.status(200).json(saving);
-      // } catch (error) {
-      //   console.log(error);
-      //   res.status(error.statusCode || 500).json(error.message);
-      // }
+    case 'PUT':
+      const { newAmount } = req.body;
+      try {
+        saving = await prisma.saving.update({
+          where: {
+            id: savingId,
+          },
+          data: {
+            amount: newAmount,
+          },
+        });
+        res.status(200).json(saving);
+      } catch (error) {
+        console.log(error);
+        res.status(error.statusCode || 500).json(error.message);
+      }
       break;
     case 'DELETE':
       try {
