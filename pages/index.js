@@ -48,7 +48,7 @@ export default function Home({
           <div
             className={`grid grid-cols-1 md:grid-cols-3  justify-center w-full items-center`}
           >
-            <Total title={pesos.name} amount={pesos.total.toFixed(2)} />
+            <Total title={pesos.name} amount={pesos.total} />
             <Total
               title={dolares.name}
               amount={dolares.total.toFixed(2)}
