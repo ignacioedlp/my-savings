@@ -144,11 +144,15 @@ export async function getStaticProps({ params }) {
     'http://localhost:3000/api/saving/' + params.saving
   ).then((res) => res.json());
 
-  console.log(save);
 
   return {
     props: {
-      save: save,
+      save: save || {
+        category: null,
+        amount: null,
+        currency: null,
+        concept: null,
+      },
     },
   };
 }
