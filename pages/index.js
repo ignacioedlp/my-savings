@@ -2,45 +2,18 @@ import Head from 'next/head'
 import CreateSaving from '../components/CreateSaving.jsx'
 import Table from '../components/Table.jsx'
 import Total from '../components/Total.jsx'
-import useSWR from 'swr'
 import ChartLine from '../components/Chart.tsx'
 
-export default function Home({ totalInUsdCCL, optionsCurrency, totalInArs }) {
-  const contadoCLL = useSWR(
-    'https://api-dolar-argentina.herokuapp.com/api/contadoliqui',
-  )
-
-  const dolarBlue = useSWR(
-    'https://api-dolar-argentina.herokuapp.com/api/dolarblue',
-  )
-
-  const criptoList = useSWR(
-    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd',
-  )
-
-  const savings = useSWR('https://my-savings.vercel.app/api/saving')
-
-  if (contadoCLL.error || dolarBlue.error || savings.error) {
-    return <div>failed to load</div>
-  }
-  if (!contadoCLL.data || !dolarBlue.data || !savings.data) {
-    return <div>loading...</div>
-  }
-
-  const handleCrypto = (data) => {
-    let totalInCrypto = 0
-
-    for (const element of data) {
-      if (element.category == 'Cripto') {
-        let coin = criptoList.data.find((c) => c.id == element.currency)
-        if (coin != undefined && coin != null) {
-          totalInCrypto += coin.current_price * element.amount
-        }
-      }
-    }
-    return totalInCrypto
-  }
-
+export default function Home({
+  savings,
+  savingsList,
+  dolarBlue,
+  dolarCCL,
+  optionsCurrency,
+  pesos,
+  cripto,
+  dolares,
+}) {
   return (
     <>
       <Head>
@@ -52,52 +25,51 @@ export default function Home({ totalInUsdCCL, optionsCurrency, totalInArs }) {
         <div className=" text-white">
           <h1 className="text-xl font-semibold">My savings</h1>
         </div>
-        <div className="flex  flex-col md:flex-row justify-center w-full items-center">
-          <Total title={'USD CCL'} amount={contadoCLL.data.venta} />
-          <ChartLine
-            cripto={handleCrypto(savings.data)}
-            dolares={parseInt(totalInUsdCCL.totalInUsd)}
-            pesos={totalInArs / parseInt(dolarBlue.data.venta)}
-          />
+        <div className="flex mt-9 flex-col md:flex-row justify-center w-full items-center">
+          <div className="block md:hidden">
+            <ChartLine
+              cripto={cripto.total}
+              dolares={dolares.total}
+              pesos={pesos.total / dolarBlue.venta}
+            />
+          </div>
+          s
+          <Total title={'USD CCL'} amount={dolarCCL.venta} />
+          <div className="hidden md:block">
+            <ChartLine
+              cripto={cripto.total}
+              dolares={dolares.total}
+              pesos={pesos.total / dolarBlue.venta}
+            />
+          </div>
+          <Total title={'USD Blue'} amount={dolarBlue.venta} />
+        </div>
+        {
+          <div
+            className={`grid grid-cols-1 md:grid-cols-3  justify-center w-full items-center`}
+          >
+            <Total title={pesos.name} amount={pesos.total.toFixed(2)} />
+            <Total
+              title={dolares.name}
+              amount={dolares.total.toFixed(2)}
+              extra={dolares.totalInArs}
+            />
+            {savings.map((saving) => (
+              <Total
+                key={saving.id}
+                title={saving.name}
+                amount={saving.total.toFixed(2)}
+                extra={saving.totalInArs}
+              />
+            ))}
+          </div>
+        }
 
-          <Total title={'USD Blue'} amount={parseFloat(dolarBlue.data.venta)} />
-        </div>
-        <div className="flex flex-col md:flex-row justify-center w-full items-center">
-          <Total
-            title={'Total ARS'}
-            amount={(
-              totalInUsdCCL.totalInUsd * parseInt(contadoCLL.data.venta) +
-              handleCrypto(savings.data) +
-              totalInArs
-            ).toFixed(2)}
-          />
-          <Total
-            title={'Total USD'}
-            amount={
-              parseInt(totalInUsdCCL.totalInUsd) +
-              parseInt(handleCrypto(savings.data))
-            }
-          />
-          <Total
-            title={'Total USD fiat'}
-            amount={totalInUsdCCL.totalInUsd}
-            extra={(
-              totalInUsdCCL.totalInUsd * parseInt(contadoCLL.data.venta)
-            ).toFixed(2)}
-          />
-          <Total
-            title={'Total Crypto'}
-            amount={handleCrypto(savings.data)}
-            extra={(
-              handleCrypto(savings.data) * parseInt(dolarBlue.data.venta)
-            ).toFixed(2)}
-          />
-        </div>
         <div className="flex flex-col md:flex-row justify-center">
           <CreateSaving optionsCurrency={optionsCurrency} />
         </div>
         <div className="mt-4 shadow-md">
-          <Table data={savings.data} />
+          <Table data={savingsList} />
         </div>
       </main>
     </>
@@ -105,21 +77,81 @@ export default function Home({ totalInUsdCCL, optionsCurrency, totalInArs }) {
 }
 
 export const getStaticProps = async () => {
-  const response = await fetch('https://my-savings.vercel.app/api/saving')
-  const criptoResponse = await fetch(
-    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd',
-    {
-      method: 'GET',
-      redirect: 'follow',
-    },
-  )
-
-  const criptoList = await criptoResponse.json()
-
   let requestOptions = {
     method: 'GET',
     redirect: 'follow',
   }
+
+  const savings = []
+
+  const criptoResponse = await fetch(
+    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd',
+    requestOptions,
+  )
+
+  const criptoList = await criptoResponse.json()
+
+  const onTop = await fetch(
+    'http://localhost:3000/api/saving?categoria=OnTop',
+    requestOptions,
+  )
+    .then((res) => res.json())
+    .catch((error) => console.log('error', error))
+
+  const payoneer = await fetch(
+    'http://localhost:3000/api/saving?categoria=Payoneer',
+    requestOptions,
+  )
+    .then((res) => res.json())
+    .catch((error) => console.log('error', error))
+
+  const criptos = await fetch(
+    'http://localhost:3000/api/saving?categoria=Cripto&list=true',
+    requestOptions,
+  )
+    .then((res) => res.json())
+    .catch((error) => console.log('error', error))
+
+  const cuentaDni = await fetch(
+    'http://localhost:3000/api/saving?categoria=Cuenta DNI',
+    requestOptions,
+  )
+    .then((res) => res.json())
+    .catch((error) => console.log('error', error))
+
+  const usdFisico = await fetch(
+    'http://localhost:3000/api/saving?categoria=USD fisico',
+    requestOptions,
+  )
+    .then((res) => res.json())
+    .catch((error) => console.log('error', error))
+
+  const lemon = await fetch(
+    'http://localhost:3000/api/saving?categoria=Lemon',
+    requestOptions,
+  )
+    .then((res) => res.json())
+    .catch((error) => console.log('error', error))
+
+  const fiat = await fetch(
+    'http://localhost:3000/api/saving?categoria=Fiat',
+    requestOptions,
+  )
+    .then((res) => res.json())
+    .catch((error) => console.log('error', error))
+
+  const mercadoLibre = await fetch(
+    'http://localhost:3000/api/saving?categoria=Mercado libre',
+    requestOptions,
+  )
+    .then((res) => res.json())
+    .catch((error) => console.log('error', error))
+
+  const savingsList = await fetch('http://localhost:3000/api/saving', {
+    requestOptions,
+  })
+    .then((res) => res.json())
+    .catch((error) => console.log('error', error))
 
   const dolarCCL = await fetch(
     'https://api-dolar-argentina.herokuapp.com/api/contadoliqui',
@@ -140,59 +172,65 @@ export const getStaticProps = async () => {
     return { value: coin.id, label: coin.name, name: 'newCurrency' }
   })
 
-  let totalInUsd = 0
-  let totalInArs = 0
   let totalInCrypto = 0
 
-  if (response.statusCode === 500)
-    return {
-      props: {
-        data,
-        totalInUsdCCL: {
-          totalInUsd: totalInUsd,
-          totalInArsCCL: totalInUsd * parseFloat(dolarCCL.venta),
-        },
-        optionsCurrency: optionsCurrency,
-        totalInCrypto: {
-          totalInCrypto: totalInCrypto,
-          totalInArsCripto: totalInCrypto * parseFloat(dolarBlue.venta),
-        },
-      },
-    }
-
-  const data = await response.json()
-
-  for (const element of data) {
-    if (element.currency == 'usd') {
-      totalInUsd = totalInUsd + element.amount
+  for (const element of criptos) {
+    let coin = criptoList.find((c) => c.id == element.currency)
+    if (coin != undefined && coin != null) {
+      totalInCrypto += coin.current_price * element.amount
     }
   }
 
-  for (const element of data) {
-    if (element.currency == 'ars') {
-      totalInArs = totalInArs + element.amount
-    }
-  }
-
-  for (const element of data) {
-    if (element.category == 'Cripto') {
-      let coin = criptoList.find((c) => c.id == element.currency)
-      if (coin != undefined && coin != null) {
-        totalInCrypto += coin.current_price * element.amount
-      }
-    }
+  savings.push({
+    name: 'Cripto',
+    total: totalInCrypto,
+    totalInArs: totalInCrypto * parseFloat(dolarBlue.venta),
+  })
+  savings.push({
+    name: 'OnTop',
+    total: onTop,
+    totalInArs: onTop * parseFloat(dolarCCL.venta),
+  })
+  savings.push({
+    name: 'Payoneer',
+    total: payoneer,
+    totalInArs: payoneer * parseFloat(dolarCCL.venta),
+  })
+  savings.push({ name: 'Lemon', total: lemon })
+  savings.push({ name: 'Mercado Libre', total: mercadoLibre })
+  savings.push({
+    name: 'Fiat',
+    total: fiat,
+    totalInArs: fiat * parseFloat(dolarBlue.venta),
+  })
+  savings.push({
+    name: 'Fisico USD',
+    total: usdFisico,
+    totalInArs: usdFisico * parseFloat(dolarBlue.venta),
+  })
+  savings.push({ name: 'Cuenta DNI', total: cuentaDni })
+  const pesos = { name: 'Total ARS', total: cuentaDni + lemon + mercadoLibre }
+  const dolares = {
+    name: 'Total USD',
+    total: payoneer + usdFisico + fiat + onTop + totalInCrypto,
+    totalInArs:
+      totalInCrypto * parseFloat(dolarBlue.venta) +
+      usdFisico * parseFloat(dolarBlue.venta) +
+      fiat * parseFloat(dolarBlue.venta) +
+      payoneer * parseFloat(dolarCCL.venta) +
+      totalInCrypto * parseFloat(dolarBlue.venta),
   }
 
   return {
     props: {
-      totalInUsdCCL: {
-        totalInUsd: totalInUsd.toFixed(2),
-      },
+      savings: savings,
+      savingsList: savingsList,
+      dolarBlue: dolarBlue,
+      dolarCCL: dolarCCL,
       optionsCurrency: optionsCurrency,
-      totalInArs: totalInArs,
-      totalInCrypto: {
-        totalInCrypto: totalInCrypto.toFixed(2),
-      },
+      pesos: pesos,
+      dolares: dolares,
+      cripto: { name: 'Total Cripto', total: totalInCrypto },
     },
   }
 }
