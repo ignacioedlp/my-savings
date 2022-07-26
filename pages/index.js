@@ -51,14 +51,14 @@ export default function Home({
             <Total title={pesos.name} amount={pesos.total} />
             <Total
               title={dolares.name}
-              amount={dolares.total.toFixed(2)}
+              amount={dolares.total}
               extra={dolares.totalInArs}
             />
             {savings.map((saving) => (
               <Total
                 key={saving.id}
                 title={saving.name}
-                amount={saving.total.toFixed(2)}
+                amount={saving.total}
                 extra={saving.totalInArs}
               />
             ))}
